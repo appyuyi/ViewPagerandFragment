@@ -1,6 +1,7 @@
 package com.example.yuyiz.viewpagerandfragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,7 +19,11 @@ import com.example.yuyiz.viewpagerandfragment.fragment.FragmentTwo;
 
 import java.util.ArrayList;
 
+import cn.bmob.v3.Bmob;
+
 public class MainActivity extends AppCompatActivity implements OnClickListener {
+    public static final String APPLICATIONID = "5cbad176caa6f94006f90d66afeebd0a";
+    public final Context CONTEXT = this.getApplicationContext();
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
     private FragmentOne fragmentOne;
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void init() {
+        Bmob.initialize(CONTEXT, APPLICATIONID);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         fragments = new ArrayList<Fragment>();
         fragmentOne = new FragmentOne();
