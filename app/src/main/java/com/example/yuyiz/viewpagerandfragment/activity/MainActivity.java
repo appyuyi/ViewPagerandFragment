@@ -1,4 +1,4 @@
-package com.example.yuyiz.viewpagerandfragment;
+package com.example.yuyiz.viewpagerandfragment.activity;
 
 
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.example.yuyiz.viewpagerandfragment.R;
 import com.example.yuyiz.viewpagerandfragment.adapter.MyViewPagerAdapter;
 import com.example.yuyiz.viewpagerandfragment.fragment.FragmentOne;
 import com.example.yuyiz.viewpagerandfragment.fragment.FragmentThree;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private TextView textView1;
     private TextView textView2;
     private TextView textView3;
+
     private int page = 0;
     private FragmentPagerAdapter pagerAdapter;
 
