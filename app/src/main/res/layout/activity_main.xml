@@ -8,7 +8,7 @@
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
     android:paddingTop="4dp"
-    tools:context="com.example.yuyiz.viewpagerandfragment.activity.MainActivity">
+    tools:context="com.example.yuyiz.viewpagerandfragment.MainActivity">
 
     <LinearLayout
         android:background="#ed3ac707"
