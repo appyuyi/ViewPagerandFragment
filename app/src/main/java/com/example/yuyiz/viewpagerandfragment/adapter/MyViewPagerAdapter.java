@@ -9,7 +9,6 @@ import java.util.ArrayList;
 /**
  * Created by yuyiz on 2017/2/8.
  */
-
 public class MyViewPagerAdapter extends FragmentPagerAdapter {
     private FragmentManager fragmentManager;
     private ArrayList<Fragment> fragments;
@@ -19,8 +18,6 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
         this.fragmentManager = fm;
         this.fragments = fragments;
     }
-
-
 
     @Override
     public Fragment getItem(int position) {
