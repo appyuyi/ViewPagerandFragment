@@ -1,5 +1,7 @@
 package com.example.yuyiz.viewpagerandfragment.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,12 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.datatype.BmobQueryResult;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SQLQueryListener;
+import com.example.yuyiz.viewpagerandfragment.object.Data;
 
 public class LoginAndRegister extends AppCompatActivity implements OnClickListener {
     private EditText etUserName;
@@ -25,12 +22,14 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
     private TextView clickForgetPassword;
     private String userName;
     private String password;
+    private Intent intent;
+    private Data data;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_and_register);
-        //初始化组件
+        setContentView(R.layout.activity_login_and_register); /*初始化组件*/
         init();
     }
 
@@ -45,19 +44,20 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
         btLogin.setOnClickListener(this);
         clickRegister.setOnClickListener(this);
         clickForgetPassword.setOnClickListener(this);
+        intent = getIntent();
+        bundle = new Bundle();
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
-            case R.id.bt_login://点击登陆
+            case R.id.bt_login:/*点击登陆*/
                 login();
                 break;
-            case R.id.text_regist://点击注册
+            case R.id.text_regist:/*点击注册*/
                 jumpToRegister();
                 break;
-            case R.id.text_forget_password://点击忘记密码
+            case R.id.text_forget_password:/*点击忘记密码*/
                 jumpToForgetPassword();
                 break;
         }
@@ -69,30 +69,20 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
     private void jumpToRegister() {
     }
 
-    private void login() {
-        //获取用户输入的用户名和密码
+    private void login() { /*获取用户输入的用户名和密码*/
         userName = etUserName.getText().toString().trim();
         password = etPassWord.getText().toString().trim();
-        if (userName.equals("") && password.equals("")) {
+        if (userName.equals("") && password.equals(""))
             login(userName, password);
-        }
-
-
     }
 
     private void login(String userName, String password) {
         Toast.makeText(this, "登陆成功！", Toast.LENGTH_SHORT).show();
-      /*  BmobQuery bmobQuery = new BmobQuery();
-        bmobQuery.doSQLQuery("", new SQLQueryListener() {
-            @Override
-            public void done(BmobQueryResult bmobQueryResult, BmobException e) {
-
-            }
-
-            @Override
-            public void done(Object o, Object o2) {
-
-            }
-        });*/
+        data = new Data(0);
+        bundle.putParcelable("data", data);
+        intent.putExtras(bundle);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+        /*  BmobQuery bmobQuery = new BmobQuery(); bmobQuery.doSQLQuery("", new SQLQueryListener() { @Override public void done(BmobQueryResult bmobQueryResult, BmobException e) { } @Override public void done(Object o, Object o2) { } });*/
     }
 }
