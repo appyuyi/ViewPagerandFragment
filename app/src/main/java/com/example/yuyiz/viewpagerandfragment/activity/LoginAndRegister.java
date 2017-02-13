@@ -72,7 +72,7 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
     private void login() { /*获取用户输入的用户名和密码*/
         userName = etUserName.getText().toString().trim();
         password = etPassWord.getText().toString().trim();
-        if (userName.equals("") && password.equals(""))
+        if (!userName.equals("") && !password.equals(""))
             login(userName, password);
     }
 
