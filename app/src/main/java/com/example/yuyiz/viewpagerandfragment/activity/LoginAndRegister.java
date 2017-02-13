@@ -72,11 +72,15 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
     private void login() { /*获取用户输入的用户名和密码*/
         userName = etUserName.getText().toString().trim();
         password = etPassWord.getText().toString().trim();
-        if (!userName.equals("") && !password.equals(""))
+        if (!userName.equals("") && !password.equals("")) {
             login(userName, password);
+        } else {
+            Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void login(String userName, String password) {
+        //TODO 写登陆逻辑
         Toast.makeText(this, "登陆成功！", Toast.LENGTH_SHORT).show();
         data = new Data(0);
         bundle.putParcelable("data", data);

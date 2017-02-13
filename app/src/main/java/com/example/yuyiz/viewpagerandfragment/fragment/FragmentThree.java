@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
 import com.example.yuyiz.viewpagerandfragment.activity.LoginAndRegister;
+import com.example.yuyiz.viewpagerandfragment.object.Data;
 
 public class FragmentThree extends Fragment implements OnClickListener {
     public View view;
@@ -58,9 +59,11 @@ public class FragmentThree extends Fragment implements OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-//            Bundle dataExtras = data.getExtras();
-//            dataExtras.get("data");
-            Toast.makeText(getContext(), "登陆成功", Toast.LENGTH_SHORT).show();
+            Bundle dataExtras = data.getExtras();
+            Data data1 = dataExtras.getParcelable("data");
+            if (data1.getLoginState() == 0) {
+                Toast.makeText(getContext(), "登陆成功。。-fragmentThree", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

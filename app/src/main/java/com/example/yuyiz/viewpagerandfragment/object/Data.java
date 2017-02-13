@@ -8,6 +8,16 @@ import android.os.Parcelable;
  */
 
 public class Data implements Parcelable {
+    private int loginState;
+
+    public int getLoginState() {
+        return loginState;
+    }
+
+    public void setLoginState(int loginState) {
+        this.loginState = loginState;
+    }
+
     public static final Creator<Data> CREATOR = new Creator<Data>() {
         @Override
         public Data createFromParcel(Parcel in) {
@@ -19,7 +29,6 @@ public class Data implements Parcelable {
             return new Data[size];
         }
     };
-    private int loginState;
 
     public Data(int loginState) {
         this.loginState = loginState;
