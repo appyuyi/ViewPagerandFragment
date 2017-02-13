@@ -7,8 +7,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobQueryResult;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SQLQueryListener;
 
 public class LoginAndRegister extends AppCompatActivity implements OnClickListener {
     private EditText etUserName;
@@ -22,7 +29,8 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_and_register); /*初始化组件*/
+        setContentView(R.layout.activity_login_and_register);
+        //初始化组件
         init();
     }
 
@@ -32,9 +40,59 @@ public class LoginAndRegister extends AppCompatActivity implements OnClickListen
         btLogin = (Button) findViewById(R.id.bt_login);
         clickRegister = (TextView) findViewById(R.id.text_regist);
         clickForgetPassword = (TextView) findViewById(R.id.text_forget_password);
+        etUserName.setOnClickListener(this);
+        etPassWord.setOnClickListener(this);
+        btLogin.setOnClickListener(this);
+        clickRegister.setOnClickListener(this);
+        clickForgetPassword.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.bt_login://点击登陆
+                login();
+                break;
+            case R.id.text_regist://点击注册
+                jumpToRegister();
+                break;
+            case R.id.text_forget_password://点击忘记密码
+                jumpToForgetPassword();
+                break;
+        }
+    }
+
+    private void jumpToForgetPassword() {
+    }
+
+    private void jumpToRegister() {
+    }
+
+    private void login() {
+        //获取用户输入的用户名和密码
+        userName = etUserName.getText().toString().trim();
+        password = etPassWord.getText().toString().trim();
+        if (userName.equals("") && password.equals("")) {
+            login(userName, password);
+        }
+
+
+    }
+
+    private void login(String userName, String password) {
+        Toast.makeText(this, "登陆成功！", Toast.LENGTH_SHORT).show();
+      /*  BmobQuery bmobQuery = new BmobQuery();
+        bmobQuery.doSQLQuery("", new SQLQueryListener() {
+            @Override
+            public void done(BmobQueryResult bmobQueryResult, BmobException e) {
+
+            }
+
+            @Override
+            public void done(Object o, Object o2) {
+
+            }
+        });*/
     }
 }
