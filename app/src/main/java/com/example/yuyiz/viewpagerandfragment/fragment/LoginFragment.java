@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
         etUserName = (EditText) view.findViewById(R.id.et_username);
         etPassWord = (EditText) view.findViewById(R.id.et_password);
         btLogin = (Button) view.findViewById(R.id.bt_login);
-        clickRegister = (TextView) view.findViewById(R.id.text_regist);
+        clickRegister = (TextView) view.findViewById(R.id.text_register);
         clickForgetPassword = (TextView) view.findViewById(R.id.text_forget_password);
         etUserName.setOnClickListener(this);
         etPassWord.setOnClickListener(this);
@@ -99,7 +99,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
             case R.id.bt_login:/*点击登陆*/
                 login();
                 break;
-            case R.id.text_regist:/*点击注册*/
+            case R.id.text_register:/*点击注册*/
                 jumpToRegister();
                 break;
             case R.id.text_forget_password:/*点击忘记密码*/
