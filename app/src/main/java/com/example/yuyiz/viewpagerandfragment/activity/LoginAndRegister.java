@@ -20,10 +20,10 @@ public class LoginAndRegister extends AppCompatActivity {
     }
 
     private void setDefaultFragment() {
-        FragmentManager fM = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fM.beginTransaction();
-        fragmentTransaction.replace(R.id.fl_login_and_register, new LoginFragment());
-        fragmentTransaction.addToBackStack("LoginAndRegister");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fl_login_and_register, LoginFragment.newInstance());
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

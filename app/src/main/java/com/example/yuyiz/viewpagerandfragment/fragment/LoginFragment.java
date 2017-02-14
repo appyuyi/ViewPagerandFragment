@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,10 +40,10 @@ public class LoginFragment extends Fragment implements OnClickListener {
         // Required empty public constructor
     }
 
+
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
         Bundle bundle = new Bundle();
-
         loginFragment.setArguments(bundle);
         return loginFragment;
     }
@@ -49,7 +51,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments()!=null) {
+        if (getArguments() != null) {
             //设置参数
         }
     }
@@ -86,7 +88,10 @@ public class LoginFragment extends Fragment implements OnClickListener {
     }
 
     private void jumpToRegister() {
-
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fl_login_and_register, RegisterFragment.newInstance());
+        fragmentTransaction.commit();
     }
 
     private void login() { /*获取用户输入的用户名和密码*/
