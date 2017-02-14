@@ -23,7 +23,6 @@ public class LoginAndRegister extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fl_login_and_register, LoginFragment.newInstance());
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

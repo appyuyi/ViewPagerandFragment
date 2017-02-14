@@ -35,6 +35,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
     private Intent intent;
     private Data data;
     private Bundle bundle;
+    private FragmentTransaction fragmentTransaction;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -82,16 +83,17 @@ public class LoginFragment extends Fragment implements OnClickListener {
         clickForgetPassword.setOnClickListener(this);
         intent = mainActivity.getIntent();
         bundle = new Bundle();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
     }
 
     private void jumpToForgetPassword() {
+        fragmentTransaction.replace(R.id.fl_login_and_register, ResetPasswordFragment.newInstance());
     }
 
     private void jumpToRegister() {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         fragmentTransaction.replace(R.id.fl_login_and_register, RegisterFragment.newInstance());
-        fragmentTransaction.commit();
     }
 
     private void login() { /*获取用户输入的用户名和密码*/
@@ -128,5 +130,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
                 jumpToForgetPassword();
                 break;
         }
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
