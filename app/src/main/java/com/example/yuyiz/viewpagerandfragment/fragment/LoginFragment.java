@@ -38,6 +38,22 @@ public class LoginFragment extends Fragment implements OnClickListener {
         // Required empty public constructor
     }
 
+    public static LoginFragment newInstance() {
+        LoginFragment loginFragment = new LoginFragment();
+        Bundle bundle = new Bundle();
+
+        loginFragment.setArguments(bundle);
+        return loginFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments()!=null) {
+            //设置参数
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +86,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
     }
 
     private void jumpToRegister() {
+
     }
 
     private void login() { /*获取用户输入的用户名和密码*/
@@ -100,7 +117,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
                 login();
                 break;
             case R.id.text_register:/*点击注册*/
-                jumpToRegister();
+                jumpToRegister();//调到注册页面
                 break;
             case R.id.text_forget_password:/*点击忘记密码*/
                 jumpToForgetPassword();
