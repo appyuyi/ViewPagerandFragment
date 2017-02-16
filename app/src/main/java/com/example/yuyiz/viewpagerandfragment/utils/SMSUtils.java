@@ -1,11 +1,13 @@
 package com.example.yuyiz.viewpagerandfragment.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.exception.BmobException;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.sms.listener.VerifySMSCodeListener;
+import cn.bmob.v3.Bmob;
 
 /**
  * Created by yuyiz on 2017/2/12.
@@ -19,6 +21,8 @@ public class SMSUtils {
 
     public SMSUtils(Context context) {
         this.context = context;
+        BmobSMS.initialize(context, "5cbad176caa6f94006f90d66afeebd0a");
+//        Bmob.initialize(context,"5cbad176caa6f94006f90d66afeebd0a");
     }
 
     public String getPhoneNumber() {
@@ -58,6 +62,7 @@ public class SMSUtils {
      */
     public void requestSmsCode(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        Log.i(" this.phoneNumber",  this.phoneNumber);
         BmobSMS.requestSMSCode(context, this.phoneNumber, NAME, new RequestSMSCodeListener() {
             @Override
             public void done(Integer integer, BmobException e) {
@@ -65,6 +70,7 @@ public class SMSUtils {
                     smsCallback.requestCodeSuccess();
                 } else {/*请求验证码失败*/
                     smsCallback.requestCodeFailed();
+                    e.printStackTrace();
                 }
             }
         });
