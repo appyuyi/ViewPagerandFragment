@@ -89,11 +89,12 @@ public class LoginFragment extends Fragment implements OnClickListener {
 
     private void jumpToForgetPassword() {
         fragmentTransaction.replace(R.id.fl_login_and_register, ResetPasswordFragment.newInstance());
+        commit();
     }
 
     private void jumpToRegister() {
-
         fragmentTransaction.replace(R.id.fl_login_and_register, RegisterFragment.newInstance());
+        commit();
     }
 
     private void login() { /*获取用户输入的用户名和密码*/
@@ -130,6 +131,10 @@ public class LoginFragment extends Fragment implements OnClickListener {
                 jumpToForgetPassword();
                 break;
         }
+
+    }
+
+    private void commit() {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

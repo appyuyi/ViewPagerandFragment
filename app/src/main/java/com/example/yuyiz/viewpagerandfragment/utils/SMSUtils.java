@@ -11,16 +11,14 @@ import cn.bmob.sms.listener.VerifySMSCodeListener;
  * Created by yuyiz on 2017/2/12.
  */
 public class SMSUtils {
+    private final String NAME = "验证";
     private String phoneNumber;
     private String code;
     private Context context;
     private SmsCallback smsCallback;
-    private final String NAME="验证";
 
-    public SMSUtils(Context context, String code, String number) {
+    public SMSUtils(Context context) {
         this.context = context;
-        this.code = code;
-        this.phoneNumber = number;
     }
 
     public String getPhoneNumber() {
@@ -58,8 +56,9 @@ public class SMSUtils {
     /**
      * 请求验证码
      */
-    public void requestSmsCode() {
-        BmobSMS.requestSMSCode(context, phoneNumber, NAME, new RequestSMSCodeListener() {
+    public void requestSmsCode(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        BmobSMS.requestSMSCode(context, this.phoneNumber, NAME, new RequestSMSCodeListener() {
             @Override
             public void done(Integer integer, BmobException e) {
                 if (e == null) {/*请求验证码成功*/
@@ -71,7 +70,7 @@ public class SMSUtils {
         });
     }
 
-    public void SmsCode() {
+    public void verifySmsCode(String code) {
         BmobSMS.verifySmsCode(context, phoneNumber, code, new VerifySMSCodeListener() {
             @Override
             public void done(BmobException e) {
