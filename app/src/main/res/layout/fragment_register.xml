@@ -5,6 +5,29 @@
     android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.example.yuyiz.viewpagerandfragment.fragment.RegisterFragment">
 
+
+    <EditText
+        android:id="@+id/et_register_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dp"
+        android:hint="请输入用户名"
+        android:inputType="textPersonName"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/et_register_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="158.5dp"
+        android:hint=""
+        android:inputType="phone" />
+
     <EditText
         android:id="@+id/et_register_verify_password"
         android:layout_width="match_parent"
@@ -12,30 +35,17 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/et_register_phone"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:hint="请再次输入密码"
         android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/et_register_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:hint=""
-        android:inputType="phone"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/bt_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="注册"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/et_register_verify_password"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/et_register_verify_password"
+        android:layout_marginTop="80dp"
+        android:text="注册" />
 </RelativeLayout>

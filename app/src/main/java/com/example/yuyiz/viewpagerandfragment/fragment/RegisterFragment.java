@@ -1,8 +1,9 @@
 package com.example.yuyiz.viewpagerandfragment.fragment;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
+import com.example.yuyiz.viewpagerandfragment.bmobtables.MyUser;
 import com.example.yuyiz.viewpagerandfragment.utils.SMSUtils;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {
     private final static int STATE_BEFORE = 0;
@@ -27,11 +32,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private int currentState = STATE_BEFORE;
     private EditText etFirst;
     private EditText etSecond;
+    private EditText etUserName;
     private Button bt;
     private SMSUtils smsUtils;
     private ProgressDialog requestDialog;
     private ProgressDialog verifyDialog;
-    private Context context;
+    private ProgressDialog registerDialog;
+    private Activity context;
     private String phoneNum;
     private String code;
 
@@ -71,6 +78,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     private void init() {
         context = getActivity();
+        etUserName = (EditText) view.findViewById(R.id.et_register_username);
         etFirst = (EditText) view.findViewById(R.id.et_register_phone);
         etSecond = (EditText) view.findViewById(R.id.et_register_verify_password);
         bt = (Button) view.findViewById(R.id.bt_register);
@@ -108,6 +116,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             @Override
             public void verifySmsCodeSuccess() {
                 //验证验证码成功
+                etUserName.setVisibility(View.VISIBLE);
                 etFirst.setText("");
                 etFirst.setHint("请输入密码");
                 etSecond.setVisibility(View.VISIBLE);
@@ -152,7 +161,56 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     private void register() {
 //注册
-        Toast.makeText(context, "注册中", Toast.LENGTH_SHORT).show();
+        String password = etFirst.getText().toString();
+        String verifyPassword = etSecond.getText().toString();
+        String userName = etUserName.getText().toString();
+        if (TextUtils.isEmpty(userName)) {
+            Toast.makeText(context, "用户名为空", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(context, "密码为空", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(verifyPassword)) {
+            Toast.makeText(context, "请确认密码", Toast.LENGTH_SHORT).show();
+        } else {
+            //注册用户
+            MyUser myUser = new MyUser();
+            myUser.setUsername(userName);
+            myUser.setPassword(password);
+            myUser.setMobilePhoneNumber("17301690283");
+
+            //设置Dialog
+            registerDialog = new ProgressDialog(context);
+            registerDialog.setTitle("正在请求发送验证码");
+            registerDialog.show();
+
+
+            myUser.signUp(new SaveListener<MyUser>() {
+                @Override
+                public void done(MyUser myUser, BmobException e) {
+                    if (e == null) {
+                        //注册成功
+                        Toast.makeText(context, "注册成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = context.getIntent();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("user", myUser);
+                        intent.putExtras(bundle);
+                        context.setResult(11, intent);
+                        if (registerDialog != null && registerDialog.isShowing()) {
+                            registerDialog.dismiss();
+                        }
+                        context.finish();
+                    } else {
+                        //注册失败
+                        e.printStackTrace();
+                        etFirst.setText("");
+                        etSecond.setText("");
+                        if (registerDialog != null && registerDialog.isShowing()) {
+                            registerDialog.dismiss();
+                        }
+                        Toast.makeText(context, "注册失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     private void verifyCode() {
@@ -174,7 +232,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private void RequestSMS() {
         //获取手机号吗
         phoneNum = etFirst.getText().toString();
-        Log.i("RequestSMS", "RequestSMS: "+phoneNum);
+        Log.i("RequestSMS", "RequestSMS: " + phoneNum);
         //请求验证码
         if (!TextUtils.isEmpty(phoneNum)) {
             //设置Dialog----注意要先设置Dialog

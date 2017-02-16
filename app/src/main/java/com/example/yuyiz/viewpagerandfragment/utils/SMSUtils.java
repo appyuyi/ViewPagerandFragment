@@ -21,7 +21,7 @@ public class SMSUtils {
 
     public SMSUtils(Context context) {
         this.context = context;
-        BmobSMS.initialize(context, "5cbad176caa6f94006f90d66afeebd0a");
+//        BmobSMS.initialize(context, "5cbad176caa6f94006f90d66afeebd0a");
 //        Bmob.initialize(context,"5cbad176caa6f94006f90d66afeebd0a");
     }
 
