@@ -50,7 +50,7 @@ public class FragmentThree extends Fragment implements OnClickListener {
         switch (v.getId()) {
             case R.id.bt_jump_to_login:
                 //跳转到Activity_login_and_register
-                startActivityForResult(intentJumpToLogin,0);
+                startActivityForResult(intentJumpToLogin, 0);
 
         }
     }
@@ -60,13 +60,12 @@ public class FragmentThree extends Fragment implements OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("result", "onActivityResult:fragment ");
         if (resultCode == Activity.RESULT_OK) {
-            Bundle dataExtras = data.getExtras();
-            myUser = dataExtras.getParcelable("user");
-            Log.i("登陆成功", myUser.getUsername() + myUser.getMobilePhoneNumber());
-            Toast.makeText(getContext(), "登陆成功", Toast.LENGTH_SHORT).show();
-            //更改界面
-            //TODO
+            if (data.getBooleanExtra("loginState", false) || data.getBooleanExtra("registerState", false)) {
+                Log.i("登陆成功", myUser.getUsername() + myUser.getMobilePhoneNumber());
+                Toast.makeText(getContext(), "登陆成功", Toast.LENGTH_SHORT).show();
+                //更改界面
+                //TODO
+            }
         }
-
     }
 }

@@ -185,6 +185,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void queryPhoneSuccess() {
+                Toast.makeText(context, "手机号码已经注册", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void queryPhoneFailed() {
                 String password = etFirst.getText().toString();
                 String verifyPassword = etSecond.getText().toString();
                 String userName = etUserName.getText().toString();
@@ -202,11 +207,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 } else {
                     userUtils.registerUser(userName, password, phoneNum);
                 }
-            }
-
-            @Override
-            public void queryPhoneFailed() {
-
             }
         });
     }

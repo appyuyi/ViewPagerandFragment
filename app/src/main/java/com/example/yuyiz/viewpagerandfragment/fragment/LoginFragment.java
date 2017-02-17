@@ -79,7 +79,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
         userUtils.setLoginCallback(new UserUtils.LoginCallback() {
             @Override
             public void loginSuccess() {
-                intent.putExtra("data", "注册成功");
+                intent.putExtra("loginState", true);
                 mainActivity.setResult(RESULT_OK, intent);
                 mainActivity.finish();
             }
