@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,10 +15,11 @@ import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
 import com.example.yuyiz.viewpagerandfragment.activity.LoginAndRegister;
-import com.example.yuyiz.viewpagerandfragment.object.Data;
+import com.example.yuyiz.viewpagerandfragment.bmobtables.MyUser;
 
 public class FragmentThree extends Fragment implements OnClickListener {
     public View view;
+    public MyUser myUser;
     private Button btJumpToLogin;
     private Intent intentJumpToLogin;
 
@@ -41,8 +43,6 @@ public class FragmentThree extends Fragment implements OnClickListener {
         btJumpToLogin = (Button) view.findViewById(R.id.bt_jump_to_login);
         btJumpToLogin.setOnClickListener(this);
         intentJumpToLogin = new Intent(getContext(), LoginAndRegister.class);
-
-
     }
 
     @Override
@@ -50,7 +50,7 @@ public class FragmentThree extends Fragment implements OnClickListener {
         switch (v.getId()) {
             case R.id.bt_jump_to_login:
                 //跳转到Activity_login_and_register
-                startActivityForResult(intentJumpToLogin, Activity.RESULT_OK);
+                startActivityForResult(intentJumpToLogin,0);
 
         }
     }
@@ -58,12 +58,14 @@ public class FragmentThree extends Fragment implements OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("result", "onActivityResult:fragment ");
         if (resultCode == Activity.RESULT_OK) {
             Bundle dataExtras = data.getExtras();
-            Data data1 = dataExtras.getParcelable("data");
-            if (data1.getLoginState() == 0) {
-                Toast.makeText(getContext(), "登陆成功。。-fragmentThree", Toast.LENGTH_SHORT).show();
-            }
+            myUser = dataExtras.getParcelable("user");
+            Log.i("登陆成功", myUser.getUsername() + myUser.getMobilePhoneNumber());
+            Toast.makeText(getContext(), "登陆成功", Toast.LENGTH_SHORT).show();
+            //更改界面
+            //TODO
         }
 
     }

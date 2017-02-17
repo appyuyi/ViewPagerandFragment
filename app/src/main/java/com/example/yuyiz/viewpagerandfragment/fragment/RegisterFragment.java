@@ -29,7 +29,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private final static int STATE_SENDED_CODE = 1;
     private final static int STATE_VERIFED_CODE_SUCCEED = 2;
     private View view;
-    private int currentState = STATE_BEFORE;
+    private int currentState = 2;
     private EditText etFirst;
     private EditText etSecond;
     private EditText etUserName;
@@ -84,11 +84,21 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         bt = (Button) view.findViewById(R.id.bt_register);
         bt.setOnClickListener(this);
         //设置初始状态
-        etFirst.setHint("请输入手机号码");
+       /* etFirst.setHint("请输入手机号码");
         etFirst.setInputType(InputType.TYPE_CLASS_PHONE);
         etSecond.setText("");
         etSecond.setVisibility(View.GONE);
-        bt.setText("获取验证码");
+        bt.setText("获取验证码");*/
+
+
+        etUserName.setVisibility(View.VISIBLE);
+        etFirst.setText("");
+        etFirst.setHint("请输入密码");
+        etSecond.setVisibility(View.VISIBLE);
+        etFirst.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        bt.setText("注册");
+
+
         smsUtils = new SMSUtils(context);
         smsUtils.setSmsCallback(new SMSUtils.SmsCallback() {
             @Override
@@ -193,7 +203,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("user", myUser);
                         intent.putExtras(bundle);
-                        context.setResult(11, intent);
+                        context.setResult(Activity.RESULT_OK, intent);
                         if (registerDialog != null && registerDialog.isShowing()) {
                             registerDialog.dismiss();
                         }

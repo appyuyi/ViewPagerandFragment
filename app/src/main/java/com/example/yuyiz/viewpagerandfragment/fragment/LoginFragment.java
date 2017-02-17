@@ -19,7 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
+import com.example.yuyiz.viewpagerandfragment.bmobtables.MyUser;
 import com.example.yuyiz.viewpagerandfragment.object.Data;
+import com.example.yuyiz.viewpagerandfragment.utils.UserUtils;
+
+import static android.app.Activity.RESULT_OK;
 
 public class LoginFragment extends Fragment implements OnClickListener {
     private Activity mainActivity;
@@ -36,6 +40,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
     private Data data;
     private Bundle bundle;
     private FragmentTransaction fragmentTransaction;
+    private UserUtils userUtils;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -71,6 +76,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
 
     private void init() {
         mainActivity = getActivity();
+        userUtils = new UserUtils(new MyUser());
         etUserName = (EditText) view.findViewById(R.id.et_username);
         etPassWord = (EditText) view.findViewById(R.id.et_password);
         btLogin = (Button) view.findViewById(R.id.bt_login);
@@ -109,13 +115,11 @@ public class LoginFragment extends Fragment implements OnClickListener {
 
     private void login(String userName, String password) {
         //TODO 写登陆逻辑
-        Toast.makeText(mainActivity, "登陆成功！", Toast.LENGTH_SHORT).show();
-        data = new Data(0);
-        bundle.putParcelable("data", data);
-        intent.putExtras(bundle);
-        mainActivity.setResult(Activity.RESULT_OK, intent);
+
+        userUtils.login();
+        intent.putExtra("data", "注册成功");
+        mainActivity.setResult(RESULT_OK, intent);
         mainActivity.finish();
-        /*  BmobQuery bmobQuery = new BmobQuery(); bmobQuery.doSQLQuery("", new SQLQueryListener() { @Override public void done(BmobQueryResult bmobQueryResult, BmobException e) { } @Override public void done(Object o, Object o2) { } });*/
     }
 
     @Override

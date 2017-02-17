@@ -1,5 +1,6 @@
 package com.example.yuyiz.viewpagerandfragment.bmobtables;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -36,4 +37,6 @@ public class MyUser extends BmobUser implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
     }
+
+
 }
