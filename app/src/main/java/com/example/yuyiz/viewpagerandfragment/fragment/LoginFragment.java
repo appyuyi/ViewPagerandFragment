@@ -72,6 +72,23 @@ public class LoginFragment extends Fragment implements OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        setCallback();
+    }
+
+    private void setCallback() {
+        userUtils.setLoginCallback(new UserUtils.LoginCallback() {
+            @Override
+            public void loginSuccess() {
+                intent.putExtra("data", "注册成功");
+                mainActivity.setResult(RESULT_OK, intent);
+                mainActivity.finish();
+            }
+
+            @Override
+            public void loginFailed() {
+                Toast.makeText(mainActivity, "登陆失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void init() {
@@ -116,10 +133,8 @@ public class LoginFragment extends Fragment implements OnClickListener {
     private void login(String userName, String password) {
         //TODO 写登陆逻辑
 
-        userUtils.login();
-        intent.putExtra("data", "注册成功");
-        mainActivity.setResult(RESULT_OK, intent);
-        mainActivity.finish();
+        userUtils.login(userName, password);
+
     }
 
     @Override
