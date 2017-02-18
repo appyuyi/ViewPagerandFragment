@@ -17,7 +17,7 @@
         android:layout_below="@+id/et_username"
         android:layout_marginTop="31dp"
         android:hint="请输入密码"
-        android:inputType="textPassword" />
+        />
 
     <Button
         android:id="@+id/bt_login"

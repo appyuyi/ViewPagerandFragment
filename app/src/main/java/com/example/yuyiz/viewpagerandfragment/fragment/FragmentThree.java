@@ -61,6 +61,7 @@ public class FragmentThree extends Fragment implements OnClickListener {
         Log.i("result", "onActivityResult:fragment ");
         if (resultCode == Activity.RESULT_OK) {
             if (data.getBooleanExtra("loginState", false) || data.getBooleanExtra("registerState", false)) {
+                myUser = MyUser.getCurrentUser(MyUser.class);
                 Log.i("登陆成功", myUser.getUsername() + myUser.getMobilePhoneNumber());
                 Toast.makeText(getContext(), "登陆成功", Toast.LENGTH_SHORT).show();
                 //更改界面

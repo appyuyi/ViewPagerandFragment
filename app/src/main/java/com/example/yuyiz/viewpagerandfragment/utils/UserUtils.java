@@ -1,6 +1,7 @@
 package com.example.yuyiz.viewpagerandfragment.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.yuyiz.viewpagerandfragment.bmobtables.MyUser;
 
@@ -84,12 +85,18 @@ public class UserUtils {
         myUser.signUp(new SaveListener<MyUser>() {
             @Override
             public void done(MyUser myUser, BmobException e) {
+
                 if (e == null) {
-                    //注册成功
-                    registerCallback.registerUserSuccess();
+
+                    if (myUser != null) {
+                        //注册成功
+                        registerCallback.registerUserSuccess();
+                    } else {
+                        //注册失败
+                        registerCallback.registerUserFailed();
+                    }
                 } else {
-                    //注册失败
-                    registerCallback.registerUserFailed();
+                    e.printStackTrace();
                 }
             }
         });
@@ -103,17 +110,42 @@ public class UserUtils {
             @Override
             public void done(MyUser myUser, BmobException e) {
                 if (e == null) {
-                    //登陆成功
-                    loginCallback.loginSuccess();
+                    if (myUser != null) {
+                        //登陆成功
+                        loginCallback.loginSuccess();
+                    } else {
+                        //登陆失败
+                        loginCallback.loginFailed();
+                    }
                 } else {
-                    //登陆失败
-                    loginCallback.loginFailed();
+                    e.printStackTrace();
                 }
             }
         });
     }
 
     //查询用户
+/*    public void queryUserByPhoneNum(String mobilePhoneNumber) {
+        BmobQuery<MyUser> query = new BmobQuery<MyUser>();
+        query.addWhereEqualTo("mobilePhoneNumber", mobilePhoneNumber);
+        query.count(MyUser.class, new CountListener() {
+            @Override
+            public void done(Integer integer, BmobException e) {
+                if (e == null) {
+                    //查询用户成功
+                    if (integer > 0) {//object.size>0,查询到用户数据
+                        registerCallback.queryPhoneSuccess();
+                    } else {
+                        registerCallback.queryPhoneFailed();
+                    }
+                } else {
+                    //更新用户信息失败
+                    e.printStackTrace();
+                }
+            }
+        });
+    }*/
+
     public void queryUserByPhoneNum(String mobilePhoneNumber) {
         BmobQuery<MyUser> query = new BmobQuery<MyUser>();
         query.addWhereEqualTo("mobilePhoneNumber", mobilePhoneNumber);
@@ -121,15 +153,24 @@ public class UserUtils {
             @Override
             public void done(List<MyUser> object, BmobException e) {
                 if (e == null) {
-                    //查询用户成功
-                    registerCallback.queryUserSuccess();
+                    if (object.size() > 0) {
+                        //查询用户成功
+                        Log.i("用户查询", "done:+++++++++++++查询到用户 a");
+                        registerCallback.queryPhoneSuccess();
+                        Log.i("用户查询", "done:+++++++++++++查询到用户 b");
+                    } else {
+                        //更新用户信息失败
+                        Log.i("用户查询", "done:+++++++++++++查询不到 a");
+                        registerCallback.queryPhoneFailed();
+                        Log.i("用户查询", "done:+++++++++++++查询不到 b");
+                    }
                 } else {
-                    //更新用户信息失败
-                    registerCallback.queryUserFailed();
+                    e.printStackTrace();
                 }
             }
         });
     }
+
 
     //查询用户
     public void queryUserByUserName(String userName) {
@@ -139,11 +180,19 @@ public class UserUtils {
             @Override
             public void done(List<MyUser> object, BmobException e) {
                 if (e == null) {
-                    //查询用户成功
-                    registerCallback.queryUserSuccess();
+                    if (object.size() > 0) {
+                        //查询用户成功
+                        Log.i("用户查询", "done:+++++++++++++查询到用户 a");
+                        registerCallback.queryUserSuccess();
+                        Log.i("用户查询", "done:+++++++++++++查询到用户 b");
+                    } else {
+                        //更新用户信息失败
+                        Log.i("用户查询", "done:+++++++++++++查询不到 a");
+                        registerCallback.queryUserFailed();
+                        Log.i("用户查询", "done:+++++++++++++查询不到 b");
+                    }
                 } else {
-                    //更新用户信息失败
-                    registerCallback.queryUserFailed();
+                    e.printStackTrace();
                 }
             }
         });

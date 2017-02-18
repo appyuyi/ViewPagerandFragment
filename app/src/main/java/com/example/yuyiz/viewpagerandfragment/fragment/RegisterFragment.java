@@ -123,8 +123,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 etUserName.setVisibility(View.VISIBLE);
                 etFirst.setText("");
                 etFirst.setHint("请输入密码");
+                etFirst.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 etSecond.setVisibility(View.VISIBLE);
-                etFirst.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                etSecond.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 bt.setText("注册");
                 currentState = STATE_VERIFED_CODE_SUCCEED;
                 if (verifyDialog != null && verifyDialog.isShowing()) {
@@ -170,43 +171,40 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void queryUserSuccess() {
-                requestDialog = new ProgressDialog(context);
-                requestDialog.setTitle("正在请求发送验证码");
-                requestDialog.show();
-                smsUtils.requestSmsCode(phoneNum);
+                //查询到用户名已经注册
+                Toast.makeText(context, "此用户名已经注册", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void queryUserFailed() {
+            public void queryUserFailed() { //查询到用户名没有注册
 
-                //查询到已经注册
-                Toast.makeText(context, "此号码已经注册", Toast.LENGTH_SHORT).show();
+
+                String password = etFirst.getText().toString();
+                String verifyPassword = etSecond.getText().toString();
+                String userName = etUserName.getText().toString();
+
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(context, "密码为空", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(verifyPassword)) {
+                    Toast.makeText(context, "请确认密码", Toast.LENGTH_SHORT).show();
+                } else if (!password.equals(verifyPassword)) {
+                    Toast.makeText(context, "两次输入密码不一样", Toast.LENGTH_SHORT).show();
+                } else {
+                    userUtils.registerUser(userName, password, "17301690283");
+                }
             }
 
             @Override
-            public void queryPhoneSuccess() {
+            public void queryPhoneSuccess() {//查询到此号码已经注册
                 Toast.makeText(context, "手机号码已经注册", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void queryPhoneFailed() {
-                String password = etFirst.getText().toString();
-                String verifyPassword = etSecond.getText().toString();
-                String userName = etUserName.getText().toString();
-                //设置Dialog
-                registerDialog = new ProgressDialog(context);
-                registerDialog.setTitle("正在请求发送验证码");
-                registerDialog.show();
-
-                if (TextUtils.isEmpty(userName)) {
-                    Toast.makeText(context, "用户名为空", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(context, "密码为空", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(verifyPassword)) {
-                    Toast.makeText(context, "请确认密码", Toast.LENGTH_SHORT).show();
-                } else {
-                    userUtils.registerUser(userName, password, phoneNum);
-                }
+            public void queryPhoneFailed() {//查询到此号码没有注册 发送验证吗
+                requestDialog = new ProgressDialog(context);
+                requestDialog.setTitle("正在请求发送验证码");
+                requestDialog.show();
+                smsUtils.requestSmsCode(phoneNum);
             }
         });
     }
@@ -232,12 +230,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     }
 
     private void register() {
-
+        String userName = etUserName.getText().toString();
         //注册
         if (TextUtils.isEmpty(etUserName.getText().toString())) {
             Toast.makeText(context, "用户名为空", Toast.LENGTH_SHORT).show();
         } else {
-            userUtils.queryUserByPhoneNum(phoneNum);
+            userUtils.queryUserByUserName(userName);
         }
     }
 

@@ -19,6 +19,7 @@ import com.example.yuyiz.viewpagerandfragment.fragment.FragmentTwo;
 
 import java.util.ArrayList;
 
+import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.Bmob;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private void init() {
         context = getApplicationContext();
         Bmob.initialize(context, APPLICATIONID);
+        BmobSMS.initialize(context, APPLICATIONID);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         fragments = new ArrayList<Fragment>();
         fragmentOne = new FragmentOne();

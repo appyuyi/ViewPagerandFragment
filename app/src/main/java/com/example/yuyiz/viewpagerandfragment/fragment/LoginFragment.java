@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,16 +96,21 @@ public class LoginFragment extends Fragment implements OnClickListener {
     private void init() {
         mainActivity = getActivity();
         userUtils = new UserUtils(new MyUser());
+
         etUserName = (EditText) view.findViewById(R.id.et_username);
         etPassWord = (EditText) view.findViewById(R.id.et_password);
         btLogin = (Button) view.findViewById(R.id.bt_login);
         clickRegister = (TextView) view.findViewById(R.id.text_register);
         clickForgetPassword = (TextView) view.findViewById(R.id.text_forget_password);
+
+        etPassWord.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
         etUserName.setOnClickListener(this);
         etPassWord.setOnClickListener(this);
         btLogin.setOnClickListener(this);
         clickRegister.setOnClickListener(this);
         clickForgetPassword.setOnClickListener(this);
+
         intent = mainActivity.getIntent();
         bundle = new Bundle();
         FragmentManager fragmentManager = getFragmentManager();
@@ -131,7 +138,6 @@ public class LoginFragment extends Fragment implements OnClickListener {
     }
 
     private void login(String userName, String password) {
-        //TODO 写登陆逻辑
 
         userUtils.login(userName, password);
 
