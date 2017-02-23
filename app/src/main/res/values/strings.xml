@@ -6,4 +6,5 @@
     <string name="pull_up_to_load">下拉刷新</string>
     <string name="pullup_to_load">上拉加载更多</string>
     <string name="pull_to_refresh">下拉刷新</string>
+    <string name="classification_name">分类</string>
 </resources>
