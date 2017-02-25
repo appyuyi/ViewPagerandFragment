@@ -2,28 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.yuyiz.viewpagerandfragment.fragment.FragmentOne">
-
     <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-        android:id="@+id/pull_to_refresh_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:id="@+id/pull_to_refresh_scroll_view"
+        >
 
         <LinearLayout
-            android:id="@+id/Linearlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:weightSum="1">
 
-            <com.example.yuyiz.viewpagerandfragment.object.MyListView
-                android:id="@+id/f1_listview"
+            <include
+                android:id="@+id/include_hander"
+                layout="@layout/hander" />
+
+            <ListView
+                android:id="@+id/p1_business_show_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
 
-
+            </ListView>
         </LinearLayout>
-    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
     <include
         android:id="@+id/f1_listview_suspended_"
         layout="@layout/listview_suspended"
