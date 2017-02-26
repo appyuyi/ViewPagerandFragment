@@ -1,6 +1,7 @@
 package com.example.yuyiz.viewpagerandfragment.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,6 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
@@ -20,21 +20,22 @@ import com.example.yuyiz.viewpagerandfragment.adapter.MyBusinessListAdapter;
 import com.example.yuyiz.viewpagerandfragment.object.Business;
 import com.example.yuyiz.viewpagerandfragment.utils.DataUtils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentOne extends Fragment implements View.OnClickListener {
 
-    PullToRefreshScrollView pullToRefreshScrollView;
     private View view;
     private ListView businessListView;
     private ArrayList<Business> businessArrayList;
+    private Context context;
     private DataUtils dataUtils;
     private MyBusinessListAdapter myBusinessListAdapter;
     private View listViewSuspended;
-//    private PullToRefreshListView pullToRefreshScrollListView;
+    private PullToRefreshListView pullToRefreshListView;
+    private View header;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,19 +46,33 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //businessArrayList存储商户信息
         businessArrayList = new ArrayList<Business>();
-        pullToRefreshScrollView = (PullToRefreshScrollView) view.findViewById(R.id.pull_to_refresh_scroll_view);
-//        businessListView = (MyListView) view.findViewById(R.id.f1_listview);
-        //获取头部
-        View hander = View.inflate(getContext(), R.layout.hander, null);
+
+        //初始化DataUtils
+        dataUtils = new DataUtils(getContext());
+
+        //初始化适配器
+        myBusinessListAdapter = new MyBusinessListAdapter(businessArrayList, getContext());
+
+        //获取PullToRefreshListView
+        pullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pull_to_refresh_list_view);
+
+        //从PullToRefreshListView中获取ListView
+        businessListView = pullToRefreshListView.getRefreshableView();
+
+        //获取头部,header为ListView上方的复杂UI
+        header = View.inflate(getContext(), R.layout.hander, null);
+
         //悬浮的ListView
         listViewSuspended = view.findViewById(R.id.f1_listview_suspended_);
-        //获取ListView
-        businessListView = (ListView) view.findViewById(R.id.p1_business_show_list_view);
 
         //添加头部
-//        businessListView.addHeaderView(View.inflate(getContext(), R.layout.hander, null));
+        businessListView.addHeaderView(header);
 
+
+        //跟随ListView滑动的悬浮组件
         View myView = View.inflate(getContext(), R.layout.listview_suspended, null);
         Button button1 = (Button) myView.findViewById(R.id.button1);
         Button button2 = (Button) myView.findViewById(R.id.button2);
@@ -66,39 +81,48 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
 
+        //悬浮组件
+        Button button4 = (Button) view.findViewById(R.id.button4);
+        Button button5 = (Button) view.findViewById(R.id.button5);
+        Button button6 = (Button) view.findViewById(R.id.button6);
+        button4.setOnClickListener(this);
+        button5.setOnClickListener(this);
+        button6.setOnClickListener(this);
 
-        //ListView添加滑动时显示的ListView
+        //添加跟着ListView滚动的悬浮组件
         businessListView.addHeaderView(myView);
 
+        //初始化时第一次查询和加载数据
+        dataUtils.query();
+        //ListView设置适配器
+        businessListView.setAdapter(myBusinessListAdapter);
 
-        pullToRefreshScrollView.setMode(PullToRefreshBase.Mode.BOTH);
-
-        pullToRefreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+        pullToRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+        pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Toast.makeText(getContext(), "下拉刷新", Toast.LENGTH_SHORT).show();
                 Log.i("FragmentOne", "onPullDownToRefresh: 下拉刷新");
-                dataUtils.query();
-                pullToRefreshScrollView.onRefreshComplete();
+//                dataUtils.query();
+                pullToRefreshListView.onRefreshComplete();
+                Log.i("FragmentOne", "onPullDownToRefresh: 下拉刷新完成");
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Toast.makeText(getContext(), "上拉加载", Toast.LENGTH_SHORT).show();
                 Log.i("FragmentOne", "onPullDownToRefresh: 上拉加载");
-                dataUtils.query();
-                pullToRefreshScrollView.onRefreshComplete();
+//                dataUtils.query();
+                pullToRefreshListView.onRefreshComplete();
+                Log.i("FragmentOne", "onPullDownToRefresh: 上拉刷新完成");
             }
         });
-        businessArrayList = new ArrayList<Business>();
-        dataUtils = new DataUtils(getContext());
+        //
         dataUtils.setDataCallBack(new DataUtils.DataCallBack() {
             @Override
             public void querySucceed(List<Business> object) {
-                for (Business business : object) {
-                    businessArrayList.add(business);
-                }
-                setListViewHeightBasedOnChildren(businessListView);
+                businessArrayList.addAll(object);
+//                setListViewHeightBasedOnChildren(businessListView);
                 myBusinessListAdapter.notifyDataSetChanged();
             }
 
@@ -107,12 +131,6 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
             }
         });
-        //初始化时第一次查询和加载数据
-        dataUtils.query();
-        //初始化适配器
-        myBusinessListAdapter = new MyBusinessListAdapter(businessArrayList, getContext());
-        //ListView设置适配器
-        businessListView.setAdapter(myBusinessListAdapter);
 
         //计算ListView高度
 //        setListViewHeightBasedOnChildren(businessListView);
@@ -127,11 +145,13 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 Log.i("TAG", "ScrollState正在滚动" + firstVisibleItem);
-//
                 if (firstVisibleItem >= 2) {
-                    Log.i("TAG", "firstVisibleItem >= 1" + firstVisibleItem);
-                    listViewSuspended.setVisibility(View.VISIBLE);
+                    if (listViewSuspended.getVisibility() == View.GONE) {
+                        Log.i("TAG", "firstVisibleItem >= 1" + firstVisibleItem);
+                        listViewSuspended.setVisibility(View.VISIBLE);
+                    }
                 } else {
+
                     listViewSuspended.setVisibility(View.GONE);
                 }
             }
@@ -168,6 +188,15 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
                 break;
             case R.id.button3:
                 Log.i("TAG", "onClick: 点击了按钮3");
+                break;
+            case R.id.button4:
+                Log.i("TAG", "onClick: 点击了按钮4");
+                break;
+            case R.id.button5:
+                Log.i("TAG", "onClick: 点击了按钮5");
+                break;
+            case R.id.button6:
+                Log.i("TAG", "onClick: 点击了按钮6");
                 break;
         }
     }
