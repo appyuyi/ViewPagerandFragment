@@ -13,7 +13,6 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.yuyiz.viewpagerandfragment.R;
 import com.example.yuyiz.viewpagerandfragment.adapter.MyBusinessListAdapter;
@@ -27,6 +26,7 @@ import java.util.List;
 
 public class FragmentOne extends Fragment implements View.OnClickListener {
 
+    private static String TAG = "FragmentOne";
     private View view;
     private ListView businessListView;
     private ArrayList<Business> businessArrayList;
@@ -47,19 +47,24 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //初始化上下文
+        context = getContext();
+
         //businessArrayList存储商户信息
         businessArrayList = new ArrayList<Business>();
 
-        //初始化DataUtils
-        dataUtils = new DataUtils(getContext());
+        //初始化dataUtils
+        dataUtils = new DataUtils(context);
 
-        //初始化适配器
-        myBusinessListAdapter = new MyBusinessListAdapter(businessArrayList, getContext());
+        //初始化BusinessListView的适配器
+        myBusinessListAdapter = new MyBusinessListAdapter(businessArrayList, context);
 
-        //获取PullToRefreshListView
+        /* 获取组件*/
+
+        //获取pullToRefreshListView组件
         pullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pull_to_refresh_list_view);
 
-        //从PullToRefreshListView中获取ListView
+        //从pullToRefreshListView中获取ListView
         businessListView = pullToRefreshListView.getRefreshableView();
 
         //获取头部,header为ListView上方的复杂UI
@@ -68,12 +73,10 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         //悬浮的ListView
         listViewSuspended = view.findViewById(R.id.f1_listview_suspended_);
 
-        //添加头部
-        businessListView.addHeaderView(header);
-
-
         //跟随ListView滑动的悬浮组件
         View myView = View.inflate(getContext(), R.layout.listview_suspended, null);
+
+        //跟随ListView滑动的悬浮组件的Button
         Button button1 = (Button) myView.findViewById(R.id.button1);
         Button button2 = (Button) myView.findViewById(R.id.button2);
         Button button3 = (Button) myView.findViewById(R.id.button3);
@@ -81,7 +84,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
 
-        //悬浮组件
+        //悬浮组件中的Button
         Button button4 = (Button) view.findViewById(R.id.button4);
         Button button5 = (Button) view.findViewById(R.id.button5);
         Button button6 = (Button) view.findViewById(R.id.button6);
@@ -89,53 +92,59 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         button5.setOnClickListener(this);
         button6.setOnClickListener(this);
 
-        //添加跟着ListView滚动的悬浮组件
+        /*添加View*/
+        //添加在ListView顶部的组件
+        businessListView.addHeaderView(header);
+
+        //添加跟随LiseView滑动的组件
         businessListView.addHeaderView(myView);
 
-        //初始化时第一次查询和加载数据
-        dataUtils.query();
-        //ListView设置适配器
+
+
+
+        /*
+        设置
+         */
+        // 设置pullToRefreshListView的拉取方式为上拉和下拉（BOTH）
+        pullToRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+
+        //businessListView设置适配器
         businessListView.setAdapter(myBusinessListAdapter);
 
-        pullToRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+        //pullToRefreshLiseView设置监听事件OnRefreshListener
         pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Toast.makeText(getContext(), "下拉刷新", Toast.LENGTH_SHORT).show();
-                Log.i("FragmentOne", "onPullDownToRefresh: 下拉刷新");
-//                dataUtils.query();
-                pullToRefreshListView.onRefreshComplete();
-                Log.i("FragmentOne", "onPullDownToRefresh: 下拉刷新完成");
+                Log.i(TAG, "onPullDownToRefresh:    正在刷新");
+                dataUtils.query();
+                myBusinessListAdapter.notifyDataSetChanged();
+                Log.i(TAG, "onPullDownToRefresh:    刷新完成");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Toast.makeText(getContext(), "上拉加载", Toast.LENGTH_SHORT).show();
-                Log.i("FragmentOne", "onPullDownToRefresh: 上拉加载");
-//                dataUtils.query();
-                pullToRefreshListView.onRefreshComplete();
-                Log.i("FragmentOne", "onPullDownToRefresh: 上拉刷新完成");
+                Log.i(TAG, "onPullDownToRefresh:    正在加载");
+                dataUtils.query();
+                myBusinessListAdapter.notifyDataSetChanged();
+                Log.i(TAG, "onPullDownToRefresh:    加载完成");
             }
         });
-        //
+
+        //dataUtils设置回掉接口
         dataUtils.setDataCallBack(new DataUtils.DataCallBack() {
             @Override
             public void querySucceed(List<Business> object) {
                 businessArrayList.addAll(object);
-//                setListViewHeightBasedOnChildren(businessListView);
                 myBusinessListAdapter.notifyDataSetChanged();
+                pullToRefreshListView.onRefreshComplete();
             }
 
             @Override
             public void queryFailed() {
-
+                myBusinessListAdapter.notifyDataSetChanged();
             }
         });
 
-        //计算ListView高度
-//        setListViewHeightBasedOnChildren(businessListView);
-
-        //ListView监听滑动事件，实现悬浮效果
         businessListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -144,18 +153,17 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Log.i("TAG", "ScrollState正在滚动" + firstVisibleItem);
                 if (firstVisibleItem >= 2) {
                     if (listViewSuspended.getVisibility() == View.GONE) {
-                        Log.i("TAG", "firstVisibleItem >= 1" + firstVisibleItem);
                         listViewSuspended.setVisibility(View.VISIBLE);
                     }
                 } else {
-
                     listViewSuspended.setVisibility(View.GONE);
                 }
             }
         });
+        //加载时查询数据
+        dataUtils.query();
     }
 
     private void setListViewHeightBasedOnChildren(ListView listView) {
