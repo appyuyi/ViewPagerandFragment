@@ -148,7 +148,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         businessListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                Log.i(TAG, "onScrollStateChanged: ceshi");
             }
 
             @Override
